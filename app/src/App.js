@@ -41,7 +41,12 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
     const emo = this.getEmoValue();
     const emos = emo.match(/vozforums.com\/images\/smilies[^"]*/g)
       .map(e => e.replace('vozforums.com',''));
-    const short = action.emoToShort(emos);
+    let short;
+    try {
+      short = action.emoToShort(emos);
+    } catch(e) {
+      alert('Error while decoding emoicons');
+    }
     action.getLongUrl(short).then(res => {
       if (res.error) {
         console.error(res.error);
@@ -80,13 +85,16 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
           <div className="col-tainer">
             <div className="col">
               <label>
-                Paste Emoicons to decode
+                Paste Emoicons to decode (From the post, not from the editor)
                 <CKEditor id='emoToDecode' refGetValue={(getValue) => this.getEmoValue = getValue}/>
-                <button onClick={this.onClickDecode}>Encode</button>
+                <button onClick={this.onClickDecode}>Decode</button>
               </label>
             </div>
             <div className="col">
               <input type="text" value={decodedURL} id='decodedUrl' />
+              <p>
+                We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with the content of the url
+              </p>
             </div>
           </div>
         </div>
