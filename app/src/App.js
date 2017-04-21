@@ -92,6 +92,9 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
             </div>
             <div className="col">
               <input type="text" value={decodedURL} id='decodedUrl' />
+              {decodedURL !=='' ? <p>
+              <a href={decodedURL} target="_blank">{decodedURL}</a>
+              </p> : null}
               <p>
                 We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with the content of the url
               </p>
