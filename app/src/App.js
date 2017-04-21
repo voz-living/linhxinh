@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
+import CKEditor from './component/CKEditor';
 import * as action from './action';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      decodedURL: '',
       encodedContent: '',
     };
   }
@@ -35,8 +37,28 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
     })
   }
 
+  onClickDecode = () => {
+    const emo = this.getEmoValue();
+    const emos = emo.match(/vozforums.com\/images\/smilies[^"]*/g)
+      .map(e => e.replace('vozforums.com',''));
+    const short = action.emoToShort(emos);
+    action.getLongUrl(short).then(res => {
+      if (res.error) {
+        console.error(res.error);
+        alert('Error while expanding the url');
+        return;
+      }
+      if(res.longUrl) {
+        this.setState({ decodedURL: res.longUrl});
+      }
+    }).catch((error) => {
+      console.error(error);
+      alert('Error while expanding the url');
+    })
+  };
+
   render() {
-    const { encodedContent } = this.state;
+    const { encodedContent, decodedURL } = this.state;
     return (
       <div className="app">
         <div className="section">
@@ -44,12 +66,27 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
           <div className="col-tainer">
             <div className="col">
               <label>
-                <input type="text" id='urlToEncode'/>
+                <input type="text" id='urlToEncode' placeholder="Url To Encode"/>
                 <button onClick={this.onClickEncode}>Encode</button>
               </label>
             </div>
             <div className="col">
               <textarea value={encodedContent}></textarea>
+            </div>
+          </div>
+        </div>
+        <div className="section">
+          <h2>Decode</h2>
+          <div className="col-tainer">
+            <div className="col">
+              <label>
+                Paste Emoicons to decode
+                <CKEditor id='emoToDecode' refGetValue={(getValue) => this.getEmoValue = getValue}/>
+                <button onClick={this.onClickDecode}>Encode</button>
+              </label>
+            </div>
+            <div className="col">
+              <input type="text" value={decodedURL} id='decodedUrl' />
             </div>
           </div>
         </div>

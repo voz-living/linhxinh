@@ -36,8 +36,20 @@
 }
 .col-tainer .col {
   flex: 1 1 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  padding: 5px;
 }
 
 textarea {
   width: 100% !important;
+}
+
+#decodedUrl {
+  width: 100%;
+}
+
+/*Override CK Style*/
+.cke_top, .cke_bottom {
+  display: none !important;
 }
