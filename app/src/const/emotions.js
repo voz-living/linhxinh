@@ -21,7 +21,7 @@ const emotions = [{
   src: '/images/smilies/Off/beauty.gif',
 }, {
   text: ':gach:',
-  src: 'images/smilies/brick.png',
+  src: '/images/smilies/brick.png',
 }, {
   text: ':">',
   src: '/images/smilies/Off/embarrassed.gif',

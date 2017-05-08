@@ -2,6 +2,10 @@ import emotions from './const/emotions';
 const PREFIX = '##ahihi ';
 const POSTFIX = ' __';
 const key = 'AIzaSyDotqQ8Zrj7KdNey9O1RYlzgp3evH9RhRc';
+const verbal = (s) => {
+  if (window.__verbal) console.info(s);
+};
+
 
 export function emosToText(emos) {
   return PREFIX + emos.join(' ') + POSTFIX;
@@ -19,15 +23,17 @@ export function shortToEmos(s) {
     } else {
       return c;
     }
-    return emotions[mapIdx].text;
+    const emo = emotions[mapIdx].text;
+    verbal(`'${c}[${cc}] => ${emo}'`)
+    return emo;
   });
   return converted;
 }
 
 export function emoToShort(emos) {
   const url = emos
-    .map(e => emotions.findIndex(emo => emo.src === e))
-    .map(idx => {
+    .map(e => [e, emotions.findIndex(emo => emo.src === e)])
+    .map(([e, idx]) => {
       let cc;
       if (idx <= 10) {
         cc = idx + 48;
@@ -38,7 +44,9 @@ export function emoToShort(emos) {
       } else {
         throw new Error('Out of range');
       }
-      return String.fromCharCode(cc);
+      const char = String.fromCharCode(cc);
+      verbal(`'${e}[${idx}] => ${char}'`)
+      return char;
     }).join('')
   return url;
 }
