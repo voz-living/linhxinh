@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import CKEditor from './component/CKEditor';
 import * as action from './action';
-
+import { marx } from './const/triethoc';
+const marxArray = marx.split(/[\.?!]/);
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       decodedURL: '',
+      emos: [],
       encodedContent: '',
+      mixMarxContent: '',
     };
   }
 
@@ -18,6 +21,7 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
 
   onClickEncode = () => {
     const url = document.querySelector('#urlToEncode').value;
+    if(url.trim() === '') alert('Empty');
     action.getShortUrl(url).then((res) => {
       if (res.error) {
         console.error(res.error);
@@ -26,9 +30,11 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
       }
       if (res.id) {
         const id = res.id.match(/goo\.gl\/(.*)/)[1];
-        const encodedContent = action.shortToEmo(id);
+        const emos = action.shortToEmos(id);
+        const encodedContent = action.emosToText(emos);
         this.setState({
-          encodedContent
+          emos,
+          encodedContent,
         })
       }
     }).catch((error) => {
@@ -55,6 +61,12 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
       }
       if(res.longUrl) {
         this.setState({ decodedURL: res.longUrl});
+      } else {
+        if (res.status === "REMOVED") {
+          alert('Link have been removed by google')
+        } else {
+          alert(`Unknown Error: ${res.status}`)
+        }
       }
     }).catch((error) => {
       console.error(error);
@@ -62,8 +74,20 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
     })
   };
 
+  onClickMixMarx = () => {
+    const { emos } = this.state;
+    const eLength = emos.length;
+    const start = Math.floor(Math.random()*(marxArray.length - eLength - 1));
+    const doc = emos.map((emo, i) => {
+      return `${marxArray[start+i]} ${emo}.`
+    }).join(' ');
+    this.setState({
+      mixMarxContent: doc,
+    });
+  }
+
   render() {
-    const { encodedContent, decodedURL } = this.state;
+    const { encodedContent, decodedURL, mixMarxContent } = this.state;
     return (
       <div className="app">
         <div className="section">
@@ -71,12 +95,14 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
           <div className="col-tainer">
             <div className="col">
               <label>
-                <input type="text" id='urlToEncode' placeholder="Url To Encode"/>
+                <input type="text" id='urlToEncode' placeholder="Url To Encode" style={{width: '100%'}}/>
                 <button onClick={this.onClickEncode}>Encode</button>
               </label>
             </div>
             <div className="col">
               <textarea value={encodedContent}></textarea>
+              <button onClick={this.onClickMixMarx}>Mix with Marx</button>
+              {mixMarxContent !== '' ? <textarea value={mixMarxContent} rows={4}></textarea> : null}
             </div>
           </div>
         </div>

@@ -2,8 +2,12 @@ import emotions from './const/emotions';
 const PREFIX = '##ahihi ';
 const POSTFIX = ' __';
 const key = 'AIzaSyDotqQ8Zrj7KdNey9O1RYlzgp3evH9RhRc';
-export function shortToEmo(s) {
-  const conveted = s.split('').map(c => {
+
+export function emosToText(emos) {
+  return PREFIX + emos.join(' ') + POSTFIX;
+}
+export function shortToEmos(s) {
+  const converted = s.split('').map(c => {
     const cc = c.charCodeAt(0);
     let mapIdx = 0;
     if (cc >= 48 && cc <= 57) {
@@ -17,7 +21,7 @@ export function shortToEmo(s) {
     }
     return emotions[mapIdx].text;
   });
-  return PREFIX + conveted.join(' ') + POSTFIX;
+  return converted;
 }
 
 export function emoToShort(emos) {

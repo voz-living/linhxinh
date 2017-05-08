@@ -31,14 +31,25 @@
   color: #333;
 }
 
+.section h2 {
+  margin: 5px 0;
+}
+
 .col-tainer {
   display: flex;
+  flex-direction: column;
 }
 .col-tainer .col {
   flex: 1 1 0;
   border: 1px solid #ddd;
   box-sizing: border-box;
   padding: 5px;
+}
+
+@media all and (min-width: 700px) { 
+  .col-tainer {
+    flex-direction: row;
+  }
 }
 
 textarea {

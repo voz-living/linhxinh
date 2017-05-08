@@ -35,8 +35,8 @@ const emotions = [{
   text: ':sosad:',
   src: '/images/smilies/Off/too_sad.gif',
 }, {
-  text: ':chaymau:',
-  src: '/images/smilies/Off/nosebleed.gif',
+  text: ':eek:',
+  src: '/images/smilies/eek.gif',
 }, {
   text: ':go:',
   src: '/images/smilies/Off/go.gif',
@@ -307,9 +307,6 @@ const emotions = [{
 }, {
   text: ':cool:',
   src: '/images/smilies/cool.gif',
-}, {
-  text: ':eek:',
-  src: '/images/smilies/eek.gif',
 }];
 
 export default emotions;
