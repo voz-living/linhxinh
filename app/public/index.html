@@ -16,6 +16,9 @@
     <title>Linh Xinh | Link Encoder Decoder</title>
   </head>
   <body>
+    <script>
+      window.ga = function() {};
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -36,10 +39,12 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
       ga('create', 'UA-97862997-1', 'auto');
-      ga('send', 'pageview');
-
+      if (window.location.search==='?extension=true') {
+        ga('send', 'event', 'extensionView');
+      } else {
+        ga('send', 'pageview');
+      }
     </script>
   </body>
 </html>

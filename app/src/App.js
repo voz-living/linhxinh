@@ -1,9 +1,10 @@
+/* global ga */
 import React, { Component } from 'react';
 import './App.css';
 import CKEditor from './component/CKEditor';
 import * as action from './action';
 import { marx } from './const/triethoc';
-const marxArray = marx.split(/[\.?!]/);
+const marxArray = marx.split(/[.?!]/);
 class App extends Component {
   constructor(props) {
     super(props);
@@ -22,16 +23,19 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
   onClickEncode = () => {
     const url = document.querySelector('#urlToEncode').value;
     if(url.trim() === '') alert('Empty');
+    ga('send', 'event', 'encode', 'clickEncode', url);
     action.getShortUrl(url).then((res) => {
       if (res.error) {
         console.error(res.error);
         alert('Error while shortening the url');
+        ga('send', 'event', 'encode', 'encodeError', url);
         return;
       }
       if (res.id) {
         const id = res.id.match(/goo\.gl\/(.*)/)[1];
         const emos = action.shortToEmos(id);
         const encodedContent = action.emosToText(emos);
+        ga('send', 'event', 'encode', 'encodeSuccess', id);
         this.setState({
           emos,
           encodedContent,
@@ -47,22 +51,28 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
     const emo = this.getEmoValue();
     const emos = emo.match(/vozforums.com\/images\/smilies[^"]*/g)
       .map(e => e.replace('vozforums.com',''));
+    ga('send', 'event', 'decode', 'clickDecode', emos.join(' '));
     let short;
     try {
       short = action.emoToShort(emos);
     } catch(e) {
       alert('Error while decoding emoicons');
+      ga('send', 'event', 'decode', 'emoToShortError', emos.join(' '));
+      return;
     }
     action.getLongUrl(short).then(res => {
       if (res.error) {
         console.error(res.error);
         alert('Error while expanding the url');
+        ga('send', 'event', 'decode', 'expandUrlError', res.error);
         return;
       }
       if(res.longUrl) {
+        ga('send', 'event', 'decode', 'decodeSuccess', res.longUrl);
         this.setState({ decodedURL: res.longUrl});
       } else {
         if (res.status === "REMOVED") {
+          ga('send', 'event', 'decode', 'linkRemove', short);
           alert('Link have been removed by google')
         } else {
           alert(`Unknown Error: ${res.status}`)
@@ -75,6 +85,7 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
   };
 
   onClickMixMarx = () => {
+    ga('send', 'event', 'encode', 'mixMarx');
     const { emos } = this.state;
     const eLength = emos.length;
     const start = Math.floor(Math.random()*(marxArray.length - eLength - 1));
