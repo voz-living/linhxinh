@@ -49,8 +49,8 @@ https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#2-unsupported
 
   onClickDecode = () => {
     const emo = this.getEmoValue();
-    const emos = emo.match(/vozforums.com\/images\/smilies[^"]*/g)
-      .map(e => e.replace('vozforums.com',''));
+    const emos = emo.match(/forums.voz.vn\/images\/smilies[^"]*/g)
+      .map(e => e.replace('forums.voz.vn',''));
     ga('send', 'event', 'decode', 'clickDecode', emos.join(' '));
     let short;
     try {
